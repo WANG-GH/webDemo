@@ -8,7 +8,7 @@ import (
 )
 
 type Program struct {
-	Program_id   uint32 `gorm:"primary_key" json:"program_id"`
+	Program_id   uint32  `gorm:"primary_key" json:"program_id"`
 	CreatedAt time.Time `json:"create_at"`
 	UpdatedAt time.Time `json:"update_at"`
 	Program_name string `json:"program_name"`
@@ -17,12 +17,6 @@ type Program struct {
 	Answer       string `json:"answer"`
 	Difficulty   string `json:"difficulty"`
 }
-type Record struct {
-	Record_id uint32  `gorm:"primary_key" json:"record_id"`
-	Id        uint32  `gorm:"foreign_key" json:"id"`
-	Program_id uint32 `gorm:"foreign_key" json:"program_id"`
-	Status  string    `json:"status"`
-}
 
 func (program *Program) TableName() string {
 	return "program"
@@ -30,10 +24,6 @@ func (program *Program) TableName() string {
 
 func (p *Program) CreateProgram(db *gorm.DB) error { //创建题目
 	return db.Create(&p).Error
-}
-
-func (r *Record) SubmitProgram(db *gorm.DB) error { //提交题目
-	return db.Create(&r).Error
 }
 
 func (p *Program) GetContent(db *gorm.DB) error { //读取题目内容

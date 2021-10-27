@@ -1,5 +1,5 @@
 CREATE TABLE `program` (
-  `program_id` int(10) unsigned DEFAULT 0,
+  `program_id` int(10) unsigned  PRIMARY KEY AUTO_INCREMENT,
   `program_name` varchar(100) DEFAULT '' COMMENT '题目名称',
   `content` varchar(500) DEFAULT '' COMMENT '内容',
   `ptype` varchar(50) DEFAULT '' COMMENT '题型',

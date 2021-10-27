@@ -2,6 +2,7 @@ package v1
 
 import (
 	"fmt"
+	"strconv"
 	"webDemo/internal/service"
 	"webDemo/pkg/app"
 	"webDemo/pkg/errcode"
@@ -41,7 +42,7 @@ func (program *Program) Create(c *gin.Context) {
 		response.ToErrorResponse(errcode.ErrorCreateProgramFail)
 		return
 	}
-	response.ToResponse(gin.H{"create": "ok"})
+	response.ToResponse(gin.H{"err": "ok"})
 	return
 }
 func (program *Program) Update(c *gin.Context) {
@@ -64,7 +65,10 @@ func (program *Program) ReturnProgramList(c *gin.Context) {
 		response.ToErrorResponse(errcode.ErrorReturnProgramListFail)
 		return
 	}
-	c.JSON(200, programs)
+	c.JSON(200, gin.H{
+		"err":"ok",
+		"programs":programs,
+	})
 	return
 }
 
@@ -73,13 +77,22 @@ func (program *Program) ReturnProgramDetail(c *gin.Context) {
 	c.ShouldBind(&param)
 	response := app.NewResponse(c)
 	svc := service.New(c.Request.Context())
-	fmt.Printf("in api: id =  %d", param.Program_id)
+	fmt.Printf("in api: id =  %s", c.Param("program_id"))
+	id, err := strconv.Atoi( c.Param("program_id"))
+	param.Program_id = uint32(id)
+
 	programs, err := svc.ReturnProgramDetail(&param)
 	if err != nil {
 		fmt.Printf("svc.ReturnProgramDetail err: %v", err)
 		response.ToErrorResponse(errcode.ErrorReturnProgramDetail)
 		return
 	}
-	c.JSON(200, programs)
+	c.JSON(200, gin.H{
+		"id":programs[0].Program_id,
+		"name":	programs[0].Program_name,
+		"content":programs[0].Content,
+		"difficulty":programs[0].Difficulty,
+		"err":"ok",
+	})
 	return
 }

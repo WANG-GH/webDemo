@@ -17,12 +17,6 @@ func (p *Dao) CreateProgram(program_id uint32, program_name string, content stri
 	return program.CreateProgram(p.engine)
 }
 
-
-// func (p *Dao) SubmitProgram(program_id uint32, program_name string, content string, ptype string, answer string, difficulty string) error {
-// 	return 
-// }
-
-
 func (p *Dao) ReturnProgramList(program_id uint32, program_name string, answer string, difficulty string) ([]model.Program, error) {
 	program := model.Program{
 		Program_id:   program_id,

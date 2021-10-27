@@ -36,10 +36,3 @@ func (d *Dao) GetUserPasswd(name string) (string, error){
 	}
 	return user.GetPasswd(d.engine)
 }
-
-func (d *Dao) GetStatus(name string) (model.User, error){
-	user := model.User{
-		UserName:      name,
-	}
-	return user.GetStatus(d.engine)
-}

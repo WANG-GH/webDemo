@@ -3,6 +3,7 @@ package v1
 import (
 	"fmt"
 	"net/http"
+	"webDemo/global"
 	"webDemo/internal/service"
 	"webDemo/pkg/app"
 	"webDemo/pkg/errcode"
@@ -25,6 +26,7 @@ func (user *User) Get(c *gin.Context) {
 
 func (user *User) Delete(c *gin.Context) {
 	app.NewResponse(c).ToErrorResponse(errcode.ServerError)
+
 	return
 }
 
@@ -40,8 +42,8 @@ func (user *User) Create(c *gin.Context) {
 		response.ToErrorResponse(errcode.ErrorCreateUserFail)
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{
-		"err": "ok",
+	c.JSON(http.StatusOK,gin.H{
+		"err":"ok",
 	})
 	return
 }
@@ -80,35 +82,15 @@ func (user *User) Login(c *gin.Context) {
 		response.ToErrorResponse(errcode.ErrorPasswdWrong)
 		return
 	}
-	user_, err := svc.GetStatus(param.Name)
-	token, err := app.GenerateToken(user_.UserName, user_.Email, int(user_.Privilege))
+	token, err := app.GenerateToken(global.JWTSetting.Secret, global.JWTSetting.Issuer)
 	if err != nil {
-		fmt.Printf("app.GenerateToken err: %v", err)
-		response.ToErrorResponse(errcode.UnauthorizedTokenGenerate)
-		return
-	}
+        fmt.Printf("app.GenerateToken err: %v", err)
+        response.ToErrorResponse(errcode.UnauthorizedTokenGenerate)
+        return
+    }
 
 	response.ToResponse(gin.H{
-		"token": token,
-		"err":   "ok",
-	})
+		"err":"ok",
+		"token": token})
 	return
-}
-
-func (user *User) GetStatus(c *gin.Context) {
-	// param := service.GetStatusRequest{}
-	// c.ShouldBind(&param)
-	// response := app.NewResponse(c)
-	// svc := service.New(c.Request.Context())
-	// var (
-	// 	token string
-	// 	ecode = errcode.Success
-	// )
-	// if s, exist := c.GetQuery("token"); exist {
-	// 	token = s
-	// } else {
-	// 	token = c.GetHeader("token")
-	// }
-	// claim, _ := app.ParseToken(token)
-	// svc.GetStatus(claim.Name)
 }

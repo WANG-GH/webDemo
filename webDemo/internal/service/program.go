@@ -1,7 +1,8 @@
 package service
 
 import (
-	"fmt"
+	"errors"
+	//"fmt"
 	"webDemo/internal/model"
 )
 
@@ -46,8 +47,9 @@ func (svc *Service) ReturnProgramDetail(param *ReturnProgramDetailRequest) ([]mo
 
 func (svc *Service) SubmitProgram(param *SubmitProgramRequest) (bool, error) {
 	program, err := svc.dao.ReturnProgramDetail(param.Program_id, "")
-	fmt.Printf("%v\n", program[0])
-	fmt.Printf("%v\n", param.Answer)
+	if(len(program) < 1){
+		return false, errors.New("no program")
+	}
 	if err != nil {
 		return false, err
 	}
@@ -64,4 +66,4 @@ func (svc *Service) SubmitProgram(param *SubmitProgramRequest) (bool, error) {
 		}
 		return false, nil
 	}
-}
+}	

@@ -1,0 +1,114 @@
+[GIN-debug] [WARNING] Running in "debug" mode. Switch to "release" mode in production.
+ - using env:	export GIN_MODE=release
+ - using code:	gin.SetMode(gin.ReleaseMode)
+
+[GIN-debug] POST   /api/v1/register          --> webDemo/internal/routers/api/v1.(*User).Create-fm (3 handlers)
+[GIN-debug] POST   /api/v1/login             --> webDemo/internal/routers/api/v1.(*User).Login-fm (3 handlers)
+[GIN-debug] DELETE /api/v1/users/:name       --> webDemo/internal/routers/api/v1.(*User).Delete-fm (3 handlers)
+[GIN-debug] PUT    /api/v1/users/:name       --> webDemo/internal/routers/api/v1.(*User).Update-fm (3 handlers)
+[GIN-debug] GET    /api/v1/users             --> webDemo/internal/routers/api/v1.(*User).Get-fm (3 handlers)
+[GIN-debug] POST   /api/v1/programs          --> webDemo/internal/routers/api/v1.(*Program).Create-fm (3 handlers)
+[GIN-debug] GET    /api/v1/programs/:program_id --> webDemo/internal/routers/api/v1.(*Program).ReturnProgramDetail-fm (3 handlers)
+[GIN-debug] GET    /api/v1/programs          --> webDemo/internal/routers/api/v1.(*Program).ReturnProgramList-fm (3 handlers)
+[GIN-debug] POST   /api/v1/programs/:program_id --> webDemo/internal/routers/api/v1.(*Program).SubmitProgram-fm (3 handlers)
+[GIN] 2021/10/31 - 17:58:23 | 404 |         659ns |       127.0.0.1 | -POST    "/api/v1/login"
+
+[35m(/home/yeye/program/webDemo/internal/model/program.go:26)[0m 
+[33m[2021-10-31 17:58:31][0m  [36;1m[0.43ms][0m  INSERT INTO `program` (`created_at`,`updated_at`,`program_name`,`content`,`ptype`,`answer`,`difficulty`) VALUES ('2021-10-31 17:58:31','2021-10-31 17:58:31','wgh','sss','dp','567','easy')  
+[36;31m[1 rows affected or returned ][0m 
+[GIN] 2021/10/31 - 17:58:31 | 200 |    5.666851ms | 117.173.139.240 | POST     "/api/v1/programs?program_name=wgh&content=sss&ptype=dp&answer=567&difficulty=easy"
+
+[35m(/home/yeye/program/webDemo/internal/model/program.go:26)[0m 
+[33m[2021-10-31 17:58:50][0m  [36;1m[0.65ms][0m  INSERT INTO `program` (`created_at`,`updated_at`,`program_name`,`content`,`ptype`,`answer`,`difficulty`) VALUES ('2021-10-31 17:58:50','2021-10-31 17:58:50','wgh22','sss','dp','567','easy')  
+[36;31m[1 rows affected or returned ][0m 
+[GIN] 2021/10/31 - 17:58:50 | 200 |   11.904048ms | 117.173.139.240 | POST     "/api/v1/programs?program_name=wgh22&content=sss&ptype=dp&answer=567&difficulty=easy"
+
+[35m(/home/yeye/program/webDemo/internal/model/program.go:35)[0m 
+[33m[2021-10-31 18:03:05][0m  [36;1m[0.52ms][0m  SELECT * FROM `program`    
+[36;31m[5 rows affected or returned ][0m 
+[GIN] 2021/10/31 - 18:03:05 | 200 |     771.505µs |  202.115.253.15 | GET      "/api/v1/programs"
+in api: id =  1id = 1id = 1
+[35m(/home/yeye/program/webDemo/internal/model/program.go:45)[0m 
+[33m[2021-10-31 18:03:07][0m  [36;1m[0.56ms][0m  SELECT * FROM `program`  WHERE (program_id = 1)  
+[36;31m[1 rows affected or returned ][0m 
+[GIN] 2021/10/31 - 18:03:07 | 200 |     706.736µs |  202.115.253.15 | GET      "/api/v1/programs/1"
+
+[35m(/home/yeye/program/webDemo/internal/model/program.go:35)[0m 
+[33m[2021-10-31 18:03:21][0m  [36;1m[0.50ms][0m  SELECT * FROM `program`    
+[36;31m[5 rows affected or returned ][0m 
+[GIN] 2021/10/31 - 18:03:21 | 200 |     636.472µs |  202.115.253.15 | GET      "/api/v1/programs"
+[GIN] 2021/10/31 - 18:03:47 | 404 |         586ns |  202.115.253.15 | PUT      "/api/v1/user/"
+
+[35m(/home/yeye/program/webDemo/internal/model/program.go:35)[0m 
+[33m[2021-10-31 18:03:50][0m  [36;1m[0.52ms][0m  SELECT * FROM `program`    
+[36;31m[5 rows affected or returned ][0m 
+[GIN] 2021/10/31 - 18:03:50 | 200 |     656.405µs |  202.115.253.15 | GET      "/api/v1/programs"
+
+[35m(/home/yeye/program/webDemo/internal/model/program.go:35)[0m 
+[33m[2021-10-31 18:03:52][0m  [36;1m[0.53ms][0m  SELECT * FROM `program`    
+[36;31m[5 rows affected or returned ][0m 
+[GIN] 2021/10/31 - 18:03:52 | 200 |      671.42µs |  202.115.253.15 | GET      "/api/v1/programs"
+
+[35m(/home/yeye/program/webDemo/internal/model/program.go:35)[0m 
+[33m[2021-10-31 18:03:53][0m  [36;1m[0.51ms][0m  SELECT * FROM `program`    
+[36;31m[5 rows affected or returned ][0m 
+[GIN] 2021/10/31 - 18:03:53 | 200 |     683.198µs |  202.115.253.15 | GET      "/api/v1/programs"
+in api: id =  5id = 5id = 5
+[35m(/home/yeye/program/webDemo/internal/model/program.go:45)[0m 
+[33m[2021-10-31 18:03:55][0m  [36;1m[0.65ms][0m  SELECT * FROM `program`  WHERE (program_id = 5)  
+[36;31m[1 rows affected or returned ][0m 
+[GIN] 2021/10/31 - 18:03:55 | 200 |    2.177413ms |  202.115.253.15 | GET      "/api/v1/programs/5"
+[GIN] 2021/10/31 - 18:10:19 | 404 |         685ns | 110.184.179.230 | GET      "/"
+[GIN] 2021/10/31 - 18:10:20 | 404 |         752ns | 110.184.179.230 | GET      "/favicon.ico"
+
+[35m(/home/yeye/program/webDemo/internal/model/program.go:35)[0m 
+[33m[2021-10-31 18:11:25][0m  [36;1m[0.50ms][0m  SELECT * FROM `program`    
+[36;31m[5 rows affected or returned ][0m 
+[GIN] 2021/10/31 - 18:11:25 | 200 |     652.561µs |  202.115.253.15 | GET      "/api/v1/programs"
+
+[35m(/home/yeye/program/webDemo/internal/model/program.go:26)[0m 
+[33m[2021-10-31 18:11:44][0m  [36;1m[0.42ms][0m  INSERT INTO `program` (`created_at`,`updated_at`,`program_name`,`content`,`ptype`,`answer`,`difficulty`) VALUES ('2021-10-31 18:11:44','2021-10-31 18:11:44','test1','答案为123','','123','easy')  
+[36;31m[1 rows affected or returned ][0m 
+[GIN] 2021/10/31 - 18:11:44 | 200 |    4.705724ms |  202.115.253.15 | POST     "/api/v1/programs"
+
+[35m(/home/yeye/program/webDemo/internal/model/program.go:35)[0m 
+[33m[2021-10-31 18:11:47][0m  [36;1m[0.59ms][0m  SELECT * FROM `program`    
+[36;31m[6 rows affected or returned ][0m 
+[GIN] 2021/10/31 - 18:11:47 | 200 |     755.776µs |  202.115.253.15 | GET      "/api/v1/programs"
+in api: id =  6id = 6id = 6
+[35m(/home/yeye/program/webDemo/internal/model/program.go:45)[0m 
+[33m[2021-10-31 18:11:50][0m  [36;1m[0.58ms][0m  SELECT * FROM `program`  WHERE (program_id = 6)  
+[36;31m[1 rows affected or returned ][0m 
+[GIN] 2021/10/31 - 18:11:50 | 200 |     740.023µs |  202.115.253.15 | GET      "/api/v1/programs/6"
+
+[35m(/home/yeye/program/webDemo/internal/model/program.go:35)[0m 
+[33m[2021-10-31 18:12:14][0m  [36;1m[0.52ms][0m  SELECT * FROM `program`    
+[36;31m[6 rows affected or returned ][0m 
+[GIN] 2021/10/31 - 18:12:14 | 200 |     684.043µs |  202.115.253.15 | GET      "/api/v1/programs"
+[GIN] 2021/10/31 - 18:15:36 | 404 |         740ns | 110.184.179.230 | GET      "/"
+[GIN] 2021/10/31 - 18:16:35 | 404 |         730ns | 110.184.179.230 | GET      "/"
+[GIN] 2021/10/31 - 18:16:38 | 404 |         673ns | 110.184.179.230 | GET      "/"
+
+[35m(/home/yeye/program/webDemo/internal/model/user.go:21)[0m 
+[33m[2021-10-31 18:17:44][0m  [36;1m[0.41ms][0m  INSERT INTO `user` (`created_at`,`updated_at`,`user_name`,`email`,`password`,`privilege`) VALUES ('2021-10-31 18:17:44','2021-10-31 18:17:44','$#sd%13 $','','&*ns) @*$U',0)  
+[36;31m[1 rows affected or returned ][0m 
+[GIN] 2021/10/31 - 18:17:44 | 200 |    4.169467ms | 110.184.179.230 | POST     "/api/v1/register"
+
+[35m(/home/yeye/program/webDemo/internal/model/user.go:49)[0m 
+[33m[2021-10-31 18:18:15][0m [31;1m Error 1054: Unknown column 'username' in 'where clause' [0m
+
+[35m(/home/yeye/program/webDemo/internal/model/user.go:49)[0m 
+[33m[2021-10-31 18:18:15][0m  [36;1m[0.42ms][0m  SELECT * FROM `user`  WHERE (username = '') ORDER BY `user`.`id` ASC LIMIT 1  
+[36;31m[0 rows affected or returned ][0m 
+接受的密码:&*ns) @*$U 
+svc.LoginFail err: 错误码：4018003, 错误信息:：用户未存在[GIN] 2021/10/31 - 18:18:15 | 500 |     605.095µs | 110.184.179.230 | POST     "/api/v1/login"
+
+[35m(/home/yeye/program/webDemo/internal/model/user.go:49)[0m 
+[33m[2021-10-31 18:18:22][0m [31;1m Error 1054: Unknown column 'username' in 'where clause' [0m
+
+[35m(/home/yeye/program/webDemo/internal/model/user.go:49)[0m 
+[33m[2021-10-31 18:18:22][0m  [36;1m[0.41ms][0m  SELECT * FROM `user`  WHERE (username = '') ORDER BY `user`.`id` ASC LIMIT 1  
+[36;31m[0 rows affected or returned ][0m 
+接受的密码:&*ns) @*$U 
+svc.LoginFail err: 错误码：4018003, 错误信息:：用户未存在[GIN] 2021/10/31 - 18:18:22 | 500 |     595.368µs | 110.184.179.230 | POST     "/api/v1/login"
+[GIN] 2021/10/31 - 18:40:50 | 404 |         711ns |     83.97.20.34 | GET      "/"

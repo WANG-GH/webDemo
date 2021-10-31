@@ -3,6 +3,7 @@ package v1
 import (
 	"fmt"
 	"strconv"
+	"strings"
 	"webDemo/internal/service"
 	"webDemo/pkg/app"
 	"webDemo/pkg/errcode"
@@ -99,6 +100,12 @@ func (program *Program) SubmitProgram(c *gin.Context) {
 	svc := service.New(c.Request.Context())
 
 	pass, err := svc.SubmitProgram(&param)
+	if strings.Contains(err.Error(), "no program") {
+		response.ToResponse(gin.H{
+			"err": "no program",
+		})
+		return
+	}
 	if err != nil {
 		response.ToResponse(gin.H{
 			"err": "can not submit",
@@ -111,8 +118,9 @@ func (program *Program) SubmitProgram(c *gin.Context) {
 			"status": "pass",
 		})
 	} else {
-		response.ToResponse(gin.H{
-			"err": "not pass",
+		response.ToResponse(gin.H{ 	
+			"err":    "ok",
+			"status": "not pass",
 		})
 	}
 	return

@@ -17,7 +17,6 @@ type User struct {
 	Privilege uint32    `json:"privilege"` //normal,admin,super
 }
 
-
 func (u *User) CreateUser(db *gorm.DB) error {
 	return db.Create(&u).Error
 }
@@ -31,13 +30,13 @@ func (u *User) DeleteById(db *gorm.DB) error {
 }
 
 func (u *User) DeleteByName(db *gorm.DB) error {
-	return db.Where("name = ?", u.UserName).Delete(&u).Error
+	return db.Where("user_name = ?", u.UserName).Delete(&u).Error
 }
 
 func (u *User) Count(db *gorm.DB) (int, error) {
 	count := 0
 	if u.UserName != "" {
-		db = db.Where("name = ?", u.UserName)
+		db = db.Where("user_name = ?", u.UserName)
 	}
 	if err := db.Model(&u).Count(&count).Error; err != nil {
 		return 0, err
@@ -47,10 +46,20 @@ func (u *User) Count(db *gorm.DB) (int, error) {
 
 func (u *User) GetPasswd(db *gorm.DB) (string, error) {
 	var user User
-	result := db.Where("name = ?", u.UserName).First(&user)
+	result := db.Where("user_name = ?", u.UserName).First(&user)
 
 	if result.Error != nil {
 		return "", errcode.ErrorUserNotExist
 	}
 	return user.Password, nil
+}
+
+func (u *User) GetStatus(db *gorm.DB) (User, error) {
+	var user User
+	result := db.Where("user_name = ?", u.UserName).First(&user)
+
+	if result.Error != nil {
+		return user, errcode.ErrorUserNotExist
+	}
+	return user, nil
 }

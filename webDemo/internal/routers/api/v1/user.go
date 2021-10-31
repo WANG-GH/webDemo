@@ -3,7 +3,6 @@ package v1
 import (
 	"fmt"
 	"net/http"
-	"webDemo/global"
 	"webDemo/internal/service"
 	"webDemo/pkg/app"
 	"webDemo/pkg/errcode"
@@ -26,7 +25,6 @@ func (user *User) Get(c *gin.Context) {
 
 func (user *User) Delete(c *gin.Context) {
 	app.NewResponse(c).ToErrorResponse(errcode.ServerError)
-
 	return
 }
 
@@ -35,14 +33,15 @@ func (user *User) Create(c *gin.Context) {
 	c.ShouldBind(&param)
 	response := app.NewResponse(c)
 	svc := service.New(c.Request.Context())
+	fmt.Println(param)
 	err := svc.CreateUser(&param)
 	if err != nil {
 		fmt.Printf("svc.CreateUser err: %v", err)
 		response.ToErrorResponse(errcode.ErrorCreateUserFail)
 		return
 	}
-	c.JSON(http.StatusOK,gin.H{
-		"err":"ok",
+	c.JSON(http.StatusOK, gin.H{
+		"err": "ok",
 	})
 	return
 }
@@ -67,7 +66,7 @@ func (user *User) Login(c *gin.Context) {
 	c.ShouldBind(&param)
 	response := app.NewResponse(c)
 	svc := service.New(c.Request.Context())
-	passwd, err := svc.LoginUser(&param)
+	user_, err := svc.GetStatus(&param)
 	fmt.Printf("接受的密码:%v \n", param.Password)
 	if err != nil {
 		// 用户未存在
@@ -75,21 +74,40 @@ func (user *User) Login(c *gin.Context) {
 		response.ToErrorResponse(errcode.ErrorUserNotExist)
 		return
 	}
-	if passwd != param.Password {
+	if user_.Password != param.Password {
 		//密码错误
 		fmt.Printf("svc.LoginFail err: 密码错误")
 		response.ToErrorResponse(errcode.ErrorPasswdWrong)
 		return
 	}
-	token, err := app.GenerateToken(global.JWTSetting.Secret, global.JWTSetting.Issuer)
+	token, err := app.GenerateToken(user_.UserName, user_.Email, int(user_.Privilege))
 	if err != nil {
-        fmt.Printf("app.GenerateToken err: %v", err)
-        response.ToErrorResponse(errcode.UnauthorizedTokenGenerate)
-        return
-    }
+		fmt.Printf("app.GenerateToken err: %v", err)
+		response.ToErrorResponse(errcode.UnauthorizedTokenGenerate)
+		return
+	}
 
 	response.ToResponse(gin.H{
-		"err":"ok",
-		"token": token})
+		"token": token,
+		"err":   "ok",
+	})
 	return
+}
+
+func (user *User) GetStatus(c *gin.Context) {
+	// param := service.GetStatusRequest{}
+	// c.ShouldBind(&param)
+	// response := app.NewResponse(c)
+	// svc := service.New(c.Request.Context())
+	// var (
+	// 	token string
+	// 	ecode = errcode.Success
+	// )
+	// if s, exist := c.GetQuery("token"); exist {
+	// 	token = s
+	// } else {
+	// 	token = c.GetHeader("token")
+	// }
+	// claim, _ := app.ParseToken(token)
+	// svc.GetStatus(claim.Name)
 }

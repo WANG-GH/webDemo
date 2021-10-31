@@ -1,7 +1,7 @@
 package routers
 
 import (
-	//"webDemo/internal/middleware"
+	"webDemo/internal/middleware"
 	v1 "webDemo/internal/routers/api/v1"
 
 	"github.com/gin-gonic/gin"
@@ -19,7 +19,7 @@ func NewRouter() *gin.Engine {
 	//apiv1.POST("/users", user.Create)
 	apiv1.POST("/register", user.Create)
 	apiv1.POST("/login", user.Login)
-	// apiv1.Use(middleware.JWT())
+	apiv1.Use(middleware.JWT())
 	apiv1.Use()
 	{
 		apiv1.DELETE("/users/:name", user.Delete)

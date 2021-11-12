@@ -3,7 +3,6 @@ package model
 import (
 	"time"
 	"webDemo/pkg/errcode"
-
 	"github.com/jinzhu/gorm"
 )
 
@@ -21,8 +20,18 @@ func (u *User) CreateUser(db *gorm.DB) error {
 	return db.Create(&u).Error
 }
 
-func (u *User) Update(db *gorm.DB) error {
-	return db.Model(&User{}).Where("id = ?", u.ID).Update(u).Error
+func (u *User) Update(db *gorm.DB) (User,error) {
+	var user User
+	err := db.Model(&User{}).Where("id = ?", u.ID).Update(u).Error
+	if err != nil{
+		return user, err
+	}
+	result := db.Where("id = ?", u.ID).First(&user)
+
+	if result.Error != nil {
+		return user, errcode.ErrorUserNotExist
+	}
+	return user, nil
 }
 
 func (u *User) DeleteById(db *gorm.DB) error {

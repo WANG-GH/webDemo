@@ -3,7 +3,10 @@ module webDemo
 go 1.14
 
 require (
+	github.com/containerd/containerd v1.5.7 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/docker/docker v20.10.10+incompatible // indirect
+	github.com/docker/go-connections v0.4.0 // indirect
 	github.com/fsnotify/fsnotify v1.5.1 // indirect
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-playground/validator/v10 v10.9.0 // indirect

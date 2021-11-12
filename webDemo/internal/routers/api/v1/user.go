@@ -50,14 +50,25 @@ func (user *User) Update(c *gin.Context) {
 	param := service.UpdateRequest{}
 	c.ShouldBind(&param)
 	response := app.NewResponse(c)
+	fmt.Printf("id = %v, name = %v", param.Userid, param.Username)
 	svc := service.New(c.Request.Context())
-	err := svc.UpdateUser(&param)
+	user_, err := svc.UpdateUser(&param)
 	if err != nil {
 		fmt.Printf("svc.UpdateUser err: %v", err)
 		response.ToErrorResponse(errcode.ErrorUpdateFail)
 		return
 	}
-	response.ToResponse(gin.H{"update": "ok"})
+	token, err := app.GenerateToken(user_.UserName, user_.Email, int(user_.Privilege), int(user_.ID))
+	if err != nil {
+		fmt.Printf("app.GenerateToken err: %v", err)
+		response.ToErrorResponse(errcode.UnauthorizedTokenGenerate)
+		return
+	}
+
+	response.ToResponse(gin.H{
+		"token": token,
+		"err":   "ok",
+	})
 	return
 }
 
@@ -80,7 +91,7 @@ func (user *User) Login(c *gin.Context) {
 		response.ToErrorResponse(errcode.ErrorPasswdWrong)
 		return
 	}
-	token, err := app.GenerateToken(user_.UserName, user_.Email, int(user_.Privilege))
+	token, err := app.GenerateToken(user_.UserName, user_.Email, int(user_.Privilege), int(user_.ID))
 	if err != nil {
 		fmt.Printf("app.GenerateToken err: %v", err)
 		response.ToErrorResponse(errcode.UnauthorizedTokenGenerate)

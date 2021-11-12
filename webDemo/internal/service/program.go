@@ -2,6 +2,8 @@ package service
 
 import (
 	"errors"
+	"fmt"
+
 	//"fmt"
 	"webDemo/internal/model"
 )
@@ -17,6 +19,14 @@ type CreateProgramRequest struct {
 
 func (svc *Service) CreateProgram(param *CreateProgramRequest) error {
 	return svc.dao.CreateProgram(param.Program_name, param.Content, param.Ptype, param.Answer, param.Difficulty)
+}
+
+type DeleteProgramRequest struct {
+	Program_id   uint32 `form:"program_id"`
+}
+
+func (svc *Service) DeleteProgram(program_id uint32) error {
+	return svc.dao.DeleteProgram(program_id)
 }
 
 type SubmitProgramRequest struct {
@@ -47,7 +57,7 @@ func (svc *Service) ReturnProgramDetail(param *ReturnProgramDetailRequest) ([]mo
 
 func (svc *Service) SubmitProgram(param *SubmitProgramRequest) (bool, error) {
 	program, err := svc.dao.ReturnProgramDetail(param.Program_id, "")
-	if(len(program) < 1){
+	if len(program) < 1 {
 		return false, errors.New("no program")
 	}
 	if err != nil {
@@ -66,4 +76,16 @@ func (svc *Service) SubmitProgram(param *SubmitProgramRequest) (bool, error) {
 		}
 		return false, nil
 	}
-}	
+}
+
+type ReturnRecord struct {
+	Record_id  uint32 `form:"record_id"`
+	User_id    uint32 `form:"user_id"`
+	Program_id uint32 `form:"program_id"`
+	Status     string `form:"status"`
+}
+
+func (svc *Service) ReturnRecord(param *ReturnRecord) ([]model.Record, error) {
+	fmt.Printf("service id = %d", param.User_id)
+	return svc.dao.ReturnRecord(param.Record_id, param.Program_id, param.User_id, param.Status)
+}

@@ -11,6 +11,7 @@ type Claims struct {
 	Privilege int    `json:"privilege"`
 	Email     string `json:"email"`
 	Name      string `json:"name"`
+	Userid    int `json:"userid"`
 	jwt.StandardClaims
 }
 
@@ -18,13 +19,14 @@ func GetJWTSecret() []byte {
 	return []byte(global.JWTSetting.Secret)
 }
 
-func GenerateToken(name string, email string, privilege int) (string, error) {
+func GenerateToken(name string, email string, privilege int, userid int) (string, error) {
 	nowTime := time.Now()
 	expireTime := nowTime.Add(global.JWTSetting.Expire)
 	claims := Claims{
 		Privilege: privilege,
 		Email:     email,
 		Name:      name,
+		Userid:    userid,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expireTime.Unix(),
 			Issuer:    global.JWTSetting.Issuer,

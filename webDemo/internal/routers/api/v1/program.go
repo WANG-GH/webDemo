@@ -3,7 +3,8 @@ package v1
 import (
 	"fmt"
 	"strconv"
-	"strings"
+
+	// "strings"
 	"webDemo/internal/service"
 	"webDemo/pkg/app"
 	"webDemo/pkg/errcode"
@@ -33,6 +34,29 @@ func (program *Program) List(c *gin.Context) {
 
 	response.ToResponse(gin.H{})
 	return
+}
+
+func (program *Program) Delete(c *gin.Context) {
+
+	param := service.DeleteProgramRequest{}
+	c.ShouldBind(&param)
+	response := app.NewResponse(c)
+	svc := service.New(c.Request.Context())
+	program_id, err := strconv.Atoi(c.Param("program_id"))
+	if err != nil{
+		response.ToResponse(gin.H{"err": "param wrong"})
+		return
+	}
+	// 确认管理员
+
+	err = svc.DeleteProgram(uint32(program_id))
+	if err != nil {
+		response.ToErrorResponse(errcode.ErrorDeleteProgram)
+		return
+	}
+	response.ToResponse(gin.H{"err": "ok"})
+	return
+	
 }
 
 func (program *Program) Create(c *gin.Context) {
@@ -96,16 +120,17 @@ func (program *Program) ReturnProgramDetail(c *gin.Context) {
 func (program *Program) SubmitProgram(c *gin.Context) {
 	param := service.SubmitProgramRequest{}
 	c.ShouldBind(&param)
+	fmt.Printf("answer = %v, userid = %v, proid = %v", param.Answer, param.User_id, param.Program_id)
 	response := app.NewResponse(c)
 	svc := service.New(c.Request.Context())
 
 	pass, err := svc.SubmitProgram(&param)
-	if strings.Contains(err.Error(), "no program") {
-		response.ToResponse(gin.H{
-			"err": "no program",
-		})
-		return
-	}
+	// if strings.Contains(err.Error(), "no program") {
+	// 	response.ToResponse(gin.H{
+	// 		"err": "no program",s
+	// 	})
+	// 	return
+	// }
 	if err != nil {
 		response.ToResponse(gin.H{
 			"err": "can not submit",
@@ -118,10 +143,11 @@ func (program *Program) SubmitProgram(c *gin.Context) {
 			"status": "pass",
 		})
 	} else {
-		response.ToResponse(gin.H{ 	
+		response.ToResponse(gin.H{
 			"err":    "ok",
 			"status": "not pass",
 		})
 	}
 	return
 }
+

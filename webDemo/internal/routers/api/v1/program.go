@@ -43,7 +43,7 @@ func (program *Program) Delete(c *gin.Context) {
 	response := app.NewResponse(c)
 	svc := service.New(c.Request.Context())
 	program_id, err := strconv.Atoi(c.Param("program_id"))
-	if err != nil{
+	if err != nil {
 		response.ToResponse(gin.H{"err": "param wrong"})
 		return
 	}
@@ -56,7 +56,7 @@ func (program *Program) Delete(c *gin.Context) {
 	}
 	response.ToResponse(gin.H{"err": "ok"})
 	return
-	
+
 }
 
 func (program *Program) Create(c *gin.Context) {
@@ -125,12 +125,6 @@ func (program *Program) SubmitProgram(c *gin.Context) {
 	svc := service.New(c.Request.Context())
 
 	pass, err := svc.SubmitProgram(&param)
-	// if strings.Contains(err.Error(), "no program") {
-	// 	response.ToResponse(gin.H{
-	// 		"err": "no program",s
-	// 	})
-	// 	return
-	// }
 	if err != nil {
 		response.ToResponse(gin.H{
 			"err": "can not submit",
@@ -151,3 +145,47 @@ func (program *Program) SubmitProgram(c *gin.Context) {
 	return
 }
 
+func (program *Program) SubmitDockerProgram(c *gin.Context) {
+	param := service.SubmitDockerProgramRequest{}
+	c.ShouldBind(&param)
+	program_id, err := strconv.Atoi(c.Param("program_id"))
+	fmt.Printf("answerCode = %v, userid = %v, proid = %v", param.AnswerCode, param.User_id, program_id)
+	response := app.NewResponse(c)
+	svc := service.New(c.Request.Context())
+
+	passret, compileData, err := svc.SubmitDockerProgram(&param, program_id)
+
+	if err != nil {
+		response.ToResponse(gin.H{
+			"err": "can not submit",
+		})
+		return
+	}
+	fmt.Printf("%v!!!!!!!!!!!!!!!!!!!!!!!!!!\n", passret)
+	if passret == 1 {
+		response.ToResponse(gin.H{
+			"err":    "ok",
+			"status": "pass",
+		})
+		return
+	} else if passret == 2 {
+		response.ToResponse(gin.H{
+			"err":    "ok",
+			"status": "compile err",
+			"data":   compileData,
+		})
+	} else if passret == 3 {
+		response.ToResponse(gin.H{
+			"err":    "ok",
+			"status": "wrong answer",
+			"data":   compileData,
+		})
+		return
+	}else if passret == 5{
+		response.ToResponse(gin.H{
+			"err":    "ok",
+			"status": "time out of 5s",
+			"data":   compileData,
+		})
+	}
+}

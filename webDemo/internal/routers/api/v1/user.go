@@ -46,6 +46,53 @@ func (user *User) Create(c *gin.Context) {
 	return
 }
 
+func (user *User) CreateByEmail(c *gin.Context) {
+	param := service.CreateUserRequest{}
+	c.ShouldBind(&param)
+	response := app.NewResponse(c)
+	svc := service.New(c.Request.Context())
+	fmt.Println(param)
+	err := svc.CreateByEmail(&param)
+	if err != nil {
+		fmt.Printf("svc.CreateUser err: %v", err)
+		response.ToErrorResponse(errcode.ErrorCreateUserFail)
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"err": "ok",
+	})
+	return
+}
+
+func (user *User) CheckCreateByEmail(c *gin.Context) {
+	param := service.ResetDataByEmailRequest{}
+	c.ShouldBind(&param)
+	response := app.NewResponse(c)
+	svc := service.New(c.Request.Context())
+	fmt.Println(param)
+	state, err := svc.CheckCreateByEmail(&param)
+	if err != nil {
+		response.ToResponse(gin.H{
+			"err": "can not create",
+		})
+		return
+	}
+	if state == 1 {
+		response.ToResponse(gin.H{
+			"err": "ok",
+		})
+	} else if state == 2 {
+		response.ToResponse(gin.H{
+			"err": "email not found",
+		})
+	} else {
+		response.ToResponse(gin.H{
+			"err": "wrong verify code",
+		})
+	}
+	return
+}
+
 func (user *User) Update(c *gin.Context) {
 	param := service.UpdateRequest{}
 	c.ShouldBind(&param)

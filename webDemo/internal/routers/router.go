@@ -15,11 +15,15 @@ func NewRouter() *gin.Engine {
 	user := v1.NewUser()
 	program := v1.NewProgram()
 	record := v1.NewRecord1()
+	email := v1.NewEmail()
 
 	apiv1 := r.Group("/api/v1")
-	//apiv1.POST("/users", user.Create)
 	apiv1.POST("/register", user.Create)
+	apiv1.POST("/registerByEmail", user.CreateByEmail)
+	apiv1.POST("/registerCheckEmail", user.CheckCreateByEmail)
 	apiv1.POST("/login", user.Login)
+	apiv1.POST("/emails/SendVerifyEmail", email.Create) //ResetByEmail
+	apiv1.POST("/emails/ResetData", email.ResetData)    //ResetData
 	//apiv1.Use(middleware.JWT())
 	apiv1.Use()
 	{
@@ -27,13 +31,15 @@ func NewRouter() *gin.Engine {
 		apiv1.PUT("/users", user.Update)
 		apiv1.GET("/users", user.Get)
 
-		apiv1.POST("/programs", program.Create)                         //上传题目
-		apiv1.GET("/programs/:program_id", program.ReturnProgramDetail) //题目搜索
-		apiv1.GET("/programs", program.ReturnProgramList)               //获取题目列表
-		apiv1.POST("/programs/:program_id", program.SubmitProgram)      //提交答案
-		
-		apiv1.DELETE("/programs/:program_id", program.Delete)           //删除题目
-		apiv1.GET("/records/:user_id", record.ReturnRecord)            //做题记录
+		apiv1.POST("/programs", program.Create)                                //上传题目
+		apiv1.GET("/programs/:program_id", program.ReturnProgramDetail)        //题目搜索
+		apiv1.GET("/programs", program.ReturnProgramList)                      //获取题目列表
+		apiv1.POST("/programs/:program_id", program.SubmitProgram)             //提交答案
+		apiv1.POST("/programsDocker/:program_id", program.SubmitDockerProgram) //提交答案
+
+		apiv1.DELETE("/programs/:program_id", program.Delete) //删除题目
+		apiv1.GET("/records/:user_id", record.ReturnRecord)   //做题记录
+		//新加两个api
 	}
 	return r
 }

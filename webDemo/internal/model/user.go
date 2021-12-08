@@ -22,11 +22,11 @@ func (u *User) CreateUser(db *gorm.DB) error {
 
 func (u *User) Update(db *gorm.DB) (User,error) {
 	var user User
-	err := db.Model(&User{}).Where("id = ?", u.ID).Update(u).Error
+	err := db.Model(&User{}).Where("user_name = ?",u.UserName).Update(u).Error
 	if err != nil{
 		return user, err
 	}
-	result := db.Where("id = ?", u.ID).First(&user)
+	result := db.Where("user_name = ?", u.UserName).First(&user)
 
 	if result.Error != nil {
 		return user, errcode.ErrorUserNotExist

@@ -12,11 +12,10 @@ func (d *Dao) CreateUser(email string,name string, passwd string, privilege uint
 	return user.CreateUser(d.engine)
 }
 
-func (d *Dao) UpdateUser(name string, passwd string, id uint32, privilege uint32) (model.User,error) {
+func (d *Dao) UpdateUser(name string, passwd string, privilege uint32) (model.User,error) {
 	user := model.User{
 		UserName:      name,
 		Password:  passwd,
-		ID:        id,
 		Privilege: privilege,
 	}
 	return user.Update(d.engine)

@@ -10,5 +10,6 @@ var (
     DatabaseSetting *setting.DatabaseSettingS
 	ServerSetting *setting.ServerSettingS
 	JWTSetting *setting.JWTSettingS
-	DBEngine *gorm.DB
+	DBEngine *gorm.DB 
+	EmailSetting *setting.EmailSettingS
 )

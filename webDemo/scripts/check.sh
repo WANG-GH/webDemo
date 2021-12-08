@@ -2,4 +2,5 @@
 
 proPath=./volume/$PROGRAM
 outname=./volume/$PROGRAM-out
-go run $proPath > $outname  
+errname=./volume/$PROGRAM-err
+go run $proPath>$outname 2>$errname

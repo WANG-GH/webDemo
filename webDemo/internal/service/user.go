@@ -1,6 +1,13 @@
 package service
 
-import "webDemo/internal/model"
+import (
+	"fmt"
+	"math/rand"
+	"time"
+	"webDemo/global"
+	"webDemo/internal/model"
+	"webDemo/pkg/email"
+)
 
 //import "webDemo/pkg/errcode"
 
@@ -22,15 +29,6 @@ type UpdateRequest struct {
 }
 
 func (svc *Service) CreateUser(param *CreateUserRequest) error {
-	// single, err := svc.dao.CountUser(param.Name)
-	// if err != nil {
-	// 	return err
-	// }
-	// if single == 0 {
-	// 	return svc.dao.CreateUser(param.Name, param.Password, 0, param.Privilege)
-	// } else {
-	// 	return errcode.ErrorUserExist
-	// }
 	return svc.dao.CreateUser(param.Email, param.UserName, param.Password, param.Privilege)
 }
 
@@ -39,9 +37,50 @@ func (svc *Service) LoginUser(param *LoginRequest) (string, error) {
 }
 
 func (svc *Service) UpdateUser(param *UpdateRequest) (model.User, error) {
-	return svc.dao.UpdateUser(param.Username, param.Password, param.Userid, param.Privilege)
+	return svc.dao.UpdateUser(param.Username, param.Password, param.Privilege)
 }
 
 func (svc *Service) GetStatus(param *LoginRequest) (model.User, error) {
 	return svc.dao.GetStatus(param.Name)
+}
+
+func (svc *Service) CreateByEmail(param *CreateUserRequest) error {
+	rand.Seed(time.Now().Unix())
+	verify_code := rand.Uint32() % 10000
+	mailer := email.NewEmail(&email.SMTPInfo{
+		Host:     global.EmailSetting.Host,
+		Port:     global.EmailSetting.Port,
+		IsSSL:    global.EmailSetting.IsSSL,
+		UserName: global.EmailSetting.UserName,
+		Password: global.EmailSetting.Password,
+		From:     global.EmailSetting.From,
+	})
+	fmt.Printf("to = %v", param.Email)
+	err := mailer.SendMail(param.Email,
+		fmt.Sprintf("注册验证"),
+		fmt.Sprintf("您的注册验证码为: %d", verify_code),
+	)
+	if err != nil {
+		fmt.Print(err)
+		return err
+	}
+	return svc.dao.CreateEmail(param.Email, verify_code)
+}
+
+// 只能创建非特权用户
+func (svc *Service) CheckCreateByEmail(param *ResetDataByEmailRequest) (int, error) {
+	verify_code, err := svc.dao.CheckVerifyCode(param.Email_num)
+	fmt.Printf("%v", param)
+	if err != nil {
+		return 2, nil
+	}
+	if verify_code == int(param.Verify_code) {
+		err =svc.dao.CreateUser(param.Email_num, param.User_name, param.Password, 0)
+		if err != nil {
+			return 0, err
+		}
+		return 1, nil
+	} else {
+		return 3, nil
+	}
 }

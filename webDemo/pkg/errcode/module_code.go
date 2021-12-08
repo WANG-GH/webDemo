@@ -12,4 +12,5 @@ var (
 	ErrorSubmitProgramFail = NewError(5011004,"提交题目失败")
 	ErrorReturnRecord = NewError(5011005,"获取提交记录失败")
 	ErrorDeleteProgram = NewError(5011006,"删除题目失败")
+	ErrorCreateEmailFail = NewError(5011007,"添加邮箱失败")
 )

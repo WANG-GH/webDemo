@@ -11,6 +11,7 @@ type Record struct {
 	User_id    uint32 `json:"user_id"`
 	Program_id uint32 `json:"program_id"`
 	Status     string `json:"status"`
+	Difficulty  string `json:"difficulty"`
 }
 
 func (record *Record) TableName() string {
